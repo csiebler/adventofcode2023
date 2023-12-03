@@ -10,7 +10,7 @@ with open(os.path.join(os.path.dirname(__file__), 'data.txt'), 'r') as f:
 # convert data to numpy array
 data = np.array([list(line) for line in data.split('\n')])
 
-# make mask that is 1 when data is not a dot and not a number
+# generate mask that is 1 when data is not a dot and not a number
 mask = np.where((data != '.') & (~np.char.isnumeric(data)), 1, 0)
 
 # now convolve mask with a 3x3 kernel of ones
@@ -26,7 +26,7 @@ for y, data_y in enumerate(data):
     # use regex to extract all numbers from line and save them as triples (number, position, length)
     numbers = [(m.group(), m.start(), len(m.group())) for m in re.finditer(r'\d+', line)]    
     for n in numbers:
-        number, position, length = n        
+        number, position, length = n
         if sum([mask[y][x] for x in range(position, position+length)]) >= 1:
             total += int(number)
 
