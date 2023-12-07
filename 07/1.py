@@ -42,6 +42,10 @@ def convert_card(x):
     else:
         return int(x)
 
+def convert_card(x):
+    card_values = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
+    return card_values.get(x) if x in card_values else int(x)
+
 hands = []
 for line in data.split('\n'):
     hand, bid = line.split(' ')

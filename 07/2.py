@@ -12,9 +12,15 @@ def rate_hand(hand):
     counts = sorted([(x, hand.count(x)) for x in set(hand)], key=lambda x: x[1], reverse=True)
     
     num_jokers = hand.count(1)
-            
-    hand_mapping = int(''.join([str(x[1]) for x in counts]))
     
+    # Remove joker from counts & use as most dominant card
+    # Only do this if not everything is a joker (5 jokers win anyway)
+    if num_jokers < 5:
+        counts = [x for x in counts if x[0] != 1]
+        counts[0] = (counts[0][0], counts[0][1] + num_jokers)
+    
+    hand_mapping = int(''.join([str(x[1]) for x in counts]))
+       
     if hand_mapping == 5:
         rating = 7
     elif hand_mapping == 41:
@@ -27,47 +33,13 @@ def rate_hand(hand):
         rating = 3
     elif hand_mapping == 2111:
         rating = 2
-        
-    # Now apply joker rules
-    if num_jokers == 5 or num_jokers == 4:
-        rating = 7
-    elif num_jokers == 3 and hand_mapping == 32:
-        rating = 7
-    elif num_jokers == 3 and hand_mapping == 311:
-        rating = 6
-    elif num_jokers == 2 and hand_mapping == 221:
-        rating = 6
-    elif num_jokers == 2 and hand_mapping == 2111:
-        rating = 4
-    elif num_jokers == 2 and hand_mapping == 32:
-        rating = 7
-    elif num_jokers == 1 and hand_mapping == 41:
-        rating = 7
-    elif num_jokers == 1 and hand_mapping == 311:
-        rating = 6
-    elif num_jokers == 1 and hand_mapping == 221:
-        rating = 5
-    elif num_jokers == 1 and hand_mapping == 2111:
-        rating = 4
-    elif num_jokers == 1 and hand_mapping == 11111:
-        rating = 2
-    
+           
     print(f"Hand {hand} --> Jokers {num_jokers} --> {counts} --> {hand_mapping} --> {rating}")
     return rating
 
 def convert_card(x):
-    if x == 'T':
-        return 10
-    elif x == 'J':
-        return 1 # this is now a joker
-    elif x == 'Q':
-        return 12
-    elif x == 'K':
-        return 13
-    elif x == 'A':
-        return 14
-    else:
-        return int(x)
+    card_values = {'T': 10, 'J': 1, 'Q': 12, 'K': 13, 'A': 14}
+    return card_values.get(x) if x in card_values else int(x)
 
 hands = []
 for line in data.split('\n'):
