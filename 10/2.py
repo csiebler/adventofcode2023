@@ -102,70 +102,65 @@ while True:
 def is_tile_empty(y, x):
     return loop[y][x] in [' ', 'I']
 
+def grow_right(y, x):
+    k = 1
+    while is_tile_empty(y, x+k):
+        loop[y][x+k] = 'I'
+        k += 1
+        
+def grow_left(y, x):
+    k = 1
+    while is_tile_empty(y, x-k):
+        loop[y][x-k] = 'I'
+        k += 1
+        
+def grow_up(y, x):
+    k = 1
+    while is_tile_empty(y-k, x):
+        loop[y-k][x] = 'I'
+        k += 1
+        
+def grow_down(y, x):
+    k = 1
+    while is_tile_empty(y+k, x):
+        loop[y+k][x] = 'I'
+        k += 1
+
+
 # loop through the pipes
 for i in range(steps):
     current_tile = loop[cy][cx]
     if current_tile == '|' and direction == 'down':
-        for k in range(1, 100):
-            if not is_tile_empty(cy, cx+k):
-                break
-            loop[cy][cx+k] = 'I'
+        grow_right(cy, cx)
         cy += 1
     if current_tile == '|' and direction == 'up':
-        for k in range(1, 100):
-            if not is_tile_empty(cy, cx-k):
-                break
-            loop[cy][cx-k] = 'I'
+        grow_left(cy, cx)
         cy -= 1
     elif current_tile == '-' and direction == 'right':
-        for k in range(1, 100):
-            if not is_tile_empty(cy-k, cx):
-                break
-            loop[cy-k][cx] = 'I'
+        grow_up(cy, cx)
         cx += 1
     elif current_tile == '-' and direction == 'left':
-        for k in range(1, 100):
-            if not is_tile_empty(cy+k, cx):
-                break
-            loop[cy+k][cx] = 'I'
+        grow_down(cy, cx)
         cx -= 1
     elif current_tile == 'L' and direction == 'down':
         cx += 1
         direction = 'right'
     elif current_tile == 'L' and direction == 'left':
-        for k in range(1, 100):
-            if not is_tile_empty(cy+k, cx):
-                break
-            loop[cy+k][cx] = 'I'
-        for k in range(1, 100):
-            if not is_tile_empty(cy, cx-k):
-                break
-            loop[cy][cx-k] = 'I'
+        grow_down(cy, cx)
+        grow_left(cy, cx)
         cy -= 1
         direction = 'up'
     elif current_tile == 'J' and direction == 'down':
-        for k in range(1, 100):
-            if not is_tile_empty(cy, cx+k):
-                break
-            loop[cy][cx+k] = 'I'
-        for k in range(1, 100):
-            if not is_tile_empty(cy+k, cx):
-                break
-            loop[cy+k][cx] = 'I'
+        grow_right(cy, cx)
+        grow_down(cy, cx)
         cx -= 1
         direction = 'left'
     elif current_tile == 'J' and direction == 'right':
         cy -= 1
         direction = 'up'
     elif current_tile == '7' and direction == 'right':
-        for k in range(1, 100):
-            if not is_tile_empty(cy-k, cx):
-                break
-            loop[cy-k][cx] = 'I'
-        for k in range(1, 100):
-            if not is_tile_empty(cy, cx+k):
-                break
-            loop[cy][cx+k] = 'I'
+        grow_up(cy, cx)
+        grow_right(cy, cx)
         cy += 1
         direction = 'down'
     elif current_tile == '7' and direction == 'up':
@@ -175,14 +170,8 @@ for i in range(steps):
         cy += 1
         direction = 'down'
     elif current_tile == 'F' and direction == 'up':
-        for k in range(1, 100):
-            if not is_tile_empty(cy, cx-k):
-                break
-            loop[cy][cx-k] = 'I'
-        for k in range(1, 100):
-            if not is_tile_empty(cy-k, cx):
-                break
-            loop[cy-k][cx] = 'I'
+        grow_left(cy, cx)
+        grow_up(cy, cx)
         cx += 1
         direction = 'right'
         
