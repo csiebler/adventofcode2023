@@ -2,7 +2,7 @@ import os
 import re
 
 # load data.txt from current folder
-with open(os.path.join(os.path.dirname(__file__), 'data.txt'), 'r') as f:
+with open(os.path.join(os.path.dirname(__file__), 'test.txt'), 'r') as f:
     data = f.read()
 
 data = data.split(',')
@@ -14,4 +14,4 @@ for d in data:
     for c in d:
         v = ((v + ord(c)) * 17) % 256
     total += v
-print(total)        
+print(total)
