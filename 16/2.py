@@ -6,9 +6,7 @@ with open(os.path.join(os.path.dirname(__file__), 'data.txt'), 'r') as f:
     data = f.read()
     
 data = data.split('\n')
-print(data)
 
-# initialize new list of lists with same dimensions as data
 marked = []
 marked = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
 
@@ -18,7 +16,6 @@ def print_marked():
         print(line)
 
 def follow_and_mark(x, y, dx, dy):
-    print(f"Following from {x}, {y} with {dx}, {dy}")
     while (x >= 0 and x < len(data[0])) and (y >= 0 and y < len(data)):
         # encode in binary all 4 directions
         # 1 = right, 2 = down, 4 = left, 8 = up
@@ -61,10 +58,25 @@ def follow_and_mark(x, y, dx, dy):
         x += dx
         y += dy
         
-follow_and_mark(0, 0, 1, 0)
+# Part 2, messy code with global variable but let's just get it done
 
-# print_marked()
-# count all fields that are not 0
-total = sum([1 for line in marked for field in line if field != 0])
-print(f"Total marked fields: {total}")
+def test_run(x, y, dx, dy):
+    global marked
+    marked = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
+    follow_and_mark(x, y, dx, dy)
+    v = sum([1 for line in marked for field in line if field != 0])
+    if v == 0:
+        print(f"v = 0 for {x}, {y}, {dx}, {dy}")
+    return v
+
+total = 0
+for x in range (0, len(data[0])):  
+    total = max(total, test_run(x, 0, 0, 1))
+    total = max(total, test_run(x, len(data)-1, 0, -1))
+    
+for y in range (0, len(data)):
+    total = max(total, test_run(0, y, 1, 0))
+    total = max(total, test_run(len(data[0])-1, y, -1, 0))
+    
+print(f"Total best score: {total}")
 
